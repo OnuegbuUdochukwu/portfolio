@@ -106,6 +106,7 @@ export interface Project {
   status: "Active" | "Archived" | "Learning Project";
   category: "Backend" | "Full Stack" | "AI/ML" | "Tooling" | "Mobile";
   why: string;
+  architectureNote?: string;
   learnings?: string[];
 }
 
@@ -126,6 +127,7 @@ export const projects: Project[] = [
     status: "Active",
     category: "Full Stack",
     why: "Solves a real communication bottleneck — complaint management — using a channel everyone already has open.",
+    architectureNote: "Chose PostgreSQL with PL/pgSQL over an ORM because complaint queries required recursive CTEs for escalation chains. Telegram served as the interface layer — no frontend framework needed, just bot commands and inline keyboards.",
     learnings: ["PostgreSQL with PL/pgSQL for stored procedures", "Docker containerization for deployment", "Python async patterns for bot interactions"],
   },
   {
@@ -138,6 +140,7 @@ export const projects: Project[] = [
     status: "Archived",
     category: "Backend",
     why: "100% Java — proof that backend-first thinking can still deliver user-facing value.",
+    architectureNote: "Pure Java application with no frontend framework — the entire rendering pipeline runs through a Spring Boot MVC controller serving Thymeleaf templates. Real-time price updates are polled from Quidax's REST API at configurable intervals rather than WebSocket, prioritising simplicity over instant push.",
   },
   {
     slug: "dynamic-portfolio",
@@ -167,6 +170,7 @@ export const projects: Project[] = [
     status: "Learning Project",
     category: "Backend",
     why: "Product thinking meets backend engineering — addresses the loneliness of remote work with real-time matching.",
+    architectureNote: "Designed around topic-based matchmaking — each lounge acts as a discrete context boundary. Coffee chat matching uses a round-robin queue with preference weighting rather than naive random assignment, minimising wait times while maximising relevance.",
   },
   {
     slug: "splitsnap",
@@ -178,6 +182,7 @@ export const projects: Project[] = [
     status: "Learning Project",
     category: "Mobile",
     why: "Everyone has split bills before. Building the backend logic for fair division is harder than it looks.",
+    architectureNote: "The splitting engine accounts for unequal contributions, partial payments, and rounding edge cases — a surprising amount of state logic for what appears to be a simple calculator. Each expense is modelled as a directed acyclic graph of debts, then settled using minimum-transaction resolution.",
   },
   {
     slug: "facial-emotion-detection",
@@ -189,6 +194,7 @@ export const projects: Project[] = [
     status: "Archived",
     category: "AI/ML",
     why: "Stepping into AI/ML territory — a CNN from scratch for real-time emotion classification.",
+    architectureNote: "Built a CNN from scratch using TensorFlow — three convolutional layers with batch normalisation and dropout to prevent overfitting on the FER2013 dataset. The real-time pipeline uses OpenCV for face detection and frame buffering to smooth predictions across consecutive frames rather than classifying each frame independently.",
   },
   {
     slug: "intelligent-career-optimizer",
@@ -200,6 +206,7 @@ export const projects: Project[] = [
     status: "Learning Project",
     category: "AI/ML",
     why: "Combines graph algorithms with ML — the kind of ambitious, systems-level thinking that defines great engineers.",
+    architectureNote: "Represents career progression as a weighted directed graph where nodes are skills and edges are learning paths. Dijkstra's algorithm computes the shortest path from current to target skill set, while a lightweight ML layer scores paths by cost and time-to-complete. The resume parser uses spaCy for entity extraction.",
   },
   {
     slug: "fundly",
@@ -233,6 +240,7 @@ export const projects: Project[] = [
     status: "Learning Project",
     category: "Tooling",
     why: "Algorithm visualizers reveal how you think about code. This one shows a fascination with search and optimization.",
+    architectureNote: "Implements four search algorithms (BFS, DFS, Dijkstra, A*) behind a unified interface — each algorithm plugs into the same visualiser via a strategy pattern. The grid representation uses a 2D array of nodes, each tracking parent pointers for path reconstruction after the search completes.",
   },
   {
     slug: "telegram-trade-bot",

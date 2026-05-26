@@ -3,6 +3,7 @@
 import { motion } from "motion/react";
 import Link from "next/link";
 import ContributionGraph from "@/components/contribution-graph";
+import LanguageBar from "@/components/language-bar";
 import { site, quotes } from "@/lib/data";
 
 export default function Home() {
@@ -39,6 +40,15 @@ export default function Home() {
           className="mt-4 text-base text-fg-muted max-w-lg leading-relaxed"
         >
           {site.subtitle}
+        </motion.p>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.25 }}
+          className="mt-4 font-mono text-xs text-fg-muted"
+        >
+          <span className="text-accent">$</span> uptime: 232d · contributions: 1,428 · languages: 8 · active repos: 75
         </motion.p>
 
         <motion.div
@@ -90,6 +100,12 @@ export default function Home() {
           Consistency
         </p>
         <ContributionGraph />
+        <div className="mt-6 pt-4 border-t border-border">
+          <p className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-3">
+            Language breakdown
+          </p>
+          <LanguageBar />
+        </div>
         <p className="text-xs text-fg-muted mt-3">
           &ldquo;I show up and ship. Building the habits of a Senior Engineer before I graduate.&rdquo;
         </p>

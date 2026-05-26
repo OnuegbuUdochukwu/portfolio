@@ -86,6 +86,17 @@ export default function ProjectDetail({ project }: { project: Project }) {
           <p className="text-sm text-fg leading-relaxed">{project.why}</p>
         </div>
 
+        {project.architectureNote && (
+          <div>
+            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
+              Architecture note
+            </h2>
+            <p className="text-sm text-fg-muted leading-relaxed border-l-2 border-accent/40 pl-3 italic">
+              {project.architectureNote}
+            </p>
+          </div>
+        )}
+
         {project.learnings && project.learnings.length > 0 && (
           <div>
             <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
