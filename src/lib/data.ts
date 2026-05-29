@@ -22,7 +22,7 @@ export const now = {
     "Building an AI-focused final year project.",
     "Deepening my Java & Spring Boot skills with production-grade APIs.",
     "Maintaining a 232-day GitHub contribution streak.",
-    "Open to backend engineering roles — Germany / remote.",
+    "Open to backend engineering roles - remote.",
   ],
 } as const;
 
@@ -319,6 +319,19 @@ export const usesCategories = [
     ],
   },
 ] as const;
+
+export const languageColors: Record<string, string> = {
+  Java: "#b07219",
+  Python: "#3572A5",
+  TypeScript: "#3178C6",
+  JavaScript: "#F7DF1E",
+  "HTML": "#E34F26",
+  CSS: "#563D7C",
+  HCL: "#006BB6",
+  PLpgSQL: "#336791",
+  Docker: "#0db7ed",
+  Shell: "#89E051",
+};
 
 export const quotes = [
   `"I'd rather debug complex backend logic for hours than try to center a div for 10 minutes."`,

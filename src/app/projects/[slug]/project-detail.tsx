@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { Project } from "@/lib/data";
+import { languageColors } from "@/lib/data";
 
 export default function ProjectDetail({ project }: { project: Project }) {
   const totalPercentage = project.languages?.reduce((sum, l) => sum + l.percentage, 0) || 100;
@@ -59,18 +60,19 @@ export default function ProjectDetail({ project }: { project: Project }) {
             {project.languages.map((lang) => (
               <div
                 key={lang.name}
-                style={{ width: `${(lang.percentage / totalPercentage) * 100}%` }}
-                className="h-full"
+                style={{ width: `${(lang.percentage / totalPercentage) * 100}%`, backgroundColor: languageColors[lang.name] || "#7C7B79" }}
+                className="h-full first:rounded-l-full last:rounded-r-full opacity-80"
                 title={`${lang.name}: ${lang.percentage}%`}
-              >
-                <div className="h-full bg-accent opacity-80 first:rounded-l-full last:rounded-r-full" />
-              </div>
+              />
             ))}
           </div>
           <div className="flex flex-wrap gap-3 mt-2">
             {project.languages.map((lang) => (
-              <span key={lang.name} className="font-mono text-[11px] text-fg-muted">
-                <span className="inline-block w-2 h-2 rounded-sm bg-accent opacity-80 mr-1.5" />
+              <span key={lang.name} className="font-mono text-[11px] text-fg-muted flex items-center gap-1.5">
+                <span
+                  className="inline-block w-2 h-2 rounded-sm"
+                  style={{ backgroundColor: languageColors[lang.name] || "#7C7B79" }}
+                />
                 {lang.name} {lang.percentage}%
               </span>
             ))}
