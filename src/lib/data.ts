@@ -323,12 +323,12 @@ export const usesCategories = [
 export const languageColors: Record<string, string> = {
   Java: "#b07219",
   Python: "#3572A5",
-  TypeScript: "#3178C6",
+  TypeScript: "#31c665",
   JavaScript: "#F7DF1E",
   "HTML": "#E34F26",
   CSS: "#563D7C",
   HCL: "#006BB6",
-  PLpgSQL: "#336791",
+  PLpgSQL: "#353391",
   Docker: "#0db7ed",
   Shell: "#89E051",
 };

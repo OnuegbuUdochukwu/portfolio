@@ -56,12 +56,12 @@ export default function ProjectDetail({ project }: { project: Project }) {
           <p className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
             Language breakdown
           </p>
-          <div className="flex h-3 rounded-full overflow-hidden">
+          <div className="flex h-3 gap-0.1">
             {project.languages.map((lang) => (
               <div
                 key={lang.name}
                 style={{ width: `${(lang.percentage / totalPercentage) * 100}%`, backgroundColor: languageColors[lang.name] || "#7C7B79" }}
-                className="h-full first:rounded-l-full last:rounded-r-full opacity-80"
+                className="h-full rounded-full opacity-80"
                 title={`${lang.name}: ${lang.percentage}%`}
               />
             ))}

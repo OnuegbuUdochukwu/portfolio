@@ -1,7 +1,7 @@
 const languages = [
   { name: "Java", percentage: 36, color: "#b07219" },
   { name: "Python", percentage: 24, color: "#3572A5" },
-  { name: "TypeScript", percentage: 15, color: "#3178C6" },
+  { name: "TypeScript", percentage: 15, color: "#31c665" },
   { name: "JavaScript", percentage: 12, color: "#F7DF1E" },
   { name: "HTML", percentage: 6, color: "#E34F26" },
   { name: "Other", percentage: 7, color: "#7C7B79" },
