@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import ContributionGraph from "@/components/contribution-graph";
 import LanguageBar from "@/components/language-bar";
+import StatusLine from "@/components/status-line";
 import { site, quotes } from "@/lib/data";
 
 export default function Home() {
@@ -48,7 +49,7 @@ export default function Home() {
           transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1], delay: 0.25 }}
           className="mt-4 font-mono text-xs text-fg-muted"
         >
-          <span className="text-accent">$</span> uptime: 232d · contributions: 1,428 · languages: 8 · active repos: 75
+          <StatusLine />
         </motion.p>
 
         <motion.div
