@@ -11,7 +11,7 @@ export const site = {
   github: "https://github.com/OnuegbuUdochukwu",
   tagline: "Backend Engineer",
   subtitle: "Final year @ Covenant University · 4.89 GPA · 1,400+ contributions.",
-  blurb: "I write clean, maintainable code. I focus on what happens behind the scenes — server logic, data structures, and the systems that carry weight without making noise. I prefer logic over design.",
+  blurb: "I write clean, maintainable code. I focus on what happens behind the scenes - server logic, data structures, and the systems that carry weight without making noise. I prefer logic over design.",
   lastUpdated: "May 2026",
 } as const;
 
@@ -126,8 +126,8 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/telegram-complaint-system",
     status: "Active",
     category: "Full Stack",
-    why: "Solves a real communication bottleneck — complaint management — using a channel everyone already has open.",
-    architectureNote: "Chose PostgreSQL with PL/pgSQL over an ORM because complaint queries required recursive CTEs for escalation chains. Telegram served as the interface layer — no frontend framework needed, just bot commands and inline keyboards.",
+    why: "Solves a real communication bottleneck - complaint management - using a channel everyone already has open.",
+    architectureNote: "Chose PostgreSQL with PL/pgSQL over an ORM because complaint queries required recursive CTEs for escalation chains. Telegram served as the interface layer - no frontend framework needed, just bot commands and inline keyboards.",
     learnings: ["PostgreSQL with PL/pgSQL for stored procedures", "Docker containerization for deployment", "Python async patterns for bot interactions"],
   },
   {
@@ -139,8 +139,8 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/Cryptocurrency-Price-Ticker",
     status: "Archived",
     category: "Backend",
-    why: "100% Java — proof that backend-first thinking can still deliver user-facing value.",
-    architectureNote: "Pure Java application with no frontend framework — the entire rendering pipeline runs through a Spring Boot MVC controller serving Thymeleaf templates. Real-time price updates are polled from Quidax's REST API at configurable intervals rather than WebSocket, prioritising simplicity over instant push.",
+    why: "100% Java - proof that backend-first thinking can still deliver user-facing value.",
+    architectureNote: "Pure Java application with no frontend framework - the entire rendering pipeline runs through a Spring Boot MVC controller serving Thymeleaf templates. Real-time price updates are polled from Quidax's REST API at configurable intervals rather than WebSocket, prioritising simplicity over instant push.",
   },
   {
     slug: "dynamic-portfolio",
@@ -158,31 +158,31 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/Dynamic_Portfolio",
     status: "Archived",
     category: "Full Stack",
-    why: "Deliberate multi-language architecture — each layer solved in the right language for the job.",
+    why: "Deliberate multi-language architecture - each layer solved in the right language for the job.",
   },
   {
     slug: "water-cooler-network",
     name: "Water Cooler Network",
-    description: "Digital networking platform for remote and hybrid workers — instant coffee chat matching, topic lounges, and corporate spaces.",
+    description: "Digital networking platform for remote and hybrid workers - instant coffee chat matching, topic lounges, and corporate spaces.",
     language: "Java",
     tags: ["Java", "Spring Boot", "Social", "Real-time"],
     githubUrl: "https://github.com/OnuegbuUdochukwu/water-cooler-network",
     status: "Learning Project",
     category: "Backend",
-    why: "Product thinking meets backend engineering — addresses the loneliness of remote work with real-time matching.",
-    architectureNote: "Designed around topic-based matchmaking — each lounge acts as a discrete context boundary. Coffee chat matching uses a round-robin queue with preference weighting rather than naive random assignment, minimising wait times while maximising relevance.",
+    why: "Product thinking meets backend engineering - addresses the loneliness of remote work with real-time matching.",
+    architectureNote: "Designed around topic-based matchmaking - each lounge acts as a discrete context boundary. Coffee chat matching uses a round-robin queue with preference weighting rather than naive random assignment, minimising wait times while maximising relevance.",
   },
   {
     slug: "splitsnap",
     name: "SplitSnap",
-    description: "Mobile expense-splitting app built with TypeScript — split bills, track IOUs, settle debts.",
+    description: "Mobile expense-splitting app built with TypeScript - split bills, track IOUs, settle debts.",
     language: "TypeScript",
     tags: ["TypeScript", "Mobile", "Expense Tracking"],
     githubUrl: "https://github.com/OnuegbuUdochukwu/SplitSnap---Mobile-Expense-Splitting-App",
     status: "Learning Project",
     category: "Mobile",
     why: "Everyone has split bills before. Building the backend logic for fair division is harder than it looks.",
-    architectureNote: "The splitting engine accounts for unequal contributions, partial payments, and rounding edge cases — a surprising amount of state logic for what appears to be a simple calculator. Each expense is modelled as a directed acyclic graph of debts, then settled using minimum-transaction resolution.",
+    architectureNote: "The splitting engine accounts for unequal contributions, partial payments, and rounding edge cases - a surprising amount of state logic for what appears to be a simple calculator. Each expense is modelled as a directed acyclic graph of debts, then settled using minimum-transaction resolution.",
   },
   {
     slug: "facial-emotion-detection",
@@ -193,8 +193,8 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/ONUEGBU--22CG031937",
     status: "Archived",
     category: "AI/ML",
-    why: "Stepping into AI/ML territory — a CNN from scratch for real-time emotion classification.",
-    architectureNote: "Built a CNN from scratch using TensorFlow — three convolutional layers with batch normalisation and dropout to prevent overfitting on the FER2013 dataset. The real-time pipeline uses OpenCV for face detection and frame buffering to smooth predictions across consecutive frames rather than classifying each frame independently.",
+    why: "Stepping into AI/ML territory - a CNN from scratch for real-time emotion classification.",
+    architectureNote: "Built a CNN from scratch using TensorFlow - three convolutional layers with batch normalisation and dropout to prevent overfitting on the FER2013 dataset. The real-time pipeline uses OpenCV for face detection and frame buffering to smooth predictions across consecutive frames rather than classifying each frame independently.",
   },
   {
     slug: "intelligent-career-optimizer",
@@ -205,7 +205,7 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/intelligent-career-optimizer",
     status: "Learning Project",
     category: "AI/ML",
-    why: "Combines graph algorithms with ML — the kind of ambitious, systems-level thinking that defines great engineers.",
+    why: "Combines graph algorithms with ML - the kind of ambitious, systems-level thinking that defines great engineers.",
     architectureNote: "Represents career progression as a weighted directed graph where nodes are skills and edges are learning paths. Dijkstra's algorithm computes the shortest path from current to target skill set, while a lightweight ML layer scores paths by cost and time-to-complete. The resume parser uses spaCy for entity extraction.",
   },
   {
@@ -217,7 +217,7 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/Fundly",
     status: "Archived",
     category: "Full Stack",
-    why: "First project with a real star on GitHub — early signal of community interest.",
+    why: "First project with a real star on GitHub - early signal of community interest.",
   },
   {
     slug: "afterclass",
@@ -228,19 +228,19 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/AfterClass",
     status: "Learning Project",
     category: "Full Stack",
-    why: "Solving a problem every student knows — staying connected after the lecture ends.",
+    why: "Solving a problem every student knows - staying connected after the lecture ends.",
   },
   {
     slug: "pathfinder",
     name: "Pathfinder",
-    description: "Visualizing search algorithms — BFS, DFS, Dijkstra, A*.",
+    description: "Visualizing search algorithms - BFS, DFS, Dijkstra, A*.",
     language: "Python",
     tags: ["Python", "Algorithms", "Visualization"],
     githubUrl: "https://github.com/OnuegbuUdochukwu/pathfinder",
     status: "Learning Project",
     category: "Tooling",
     why: "Algorithm visualizers reveal how you think about code. This one shows a fascination with search and optimization.",
-    architectureNote: "Implements four search algorithms (BFS, DFS, Dijkstra, A*) behind a unified interface — each algorithm plugs into the same visualiser via a strategy pattern. The grid representation uses a 2D array of nodes, each tracking parent pointers for path reconstruction after the search completes.",
+    architectureNote: "Implements four search algorithms (BFS, DFS, Dijkstra, A*) behind a unified interface - each algorithm plugs into the same visualiser via a strategy pattern. The grid representation uses a 2D array of nodes, each tracking parent pointers for path reconstruction after the search completes.",
   },
   {
     slug: "telegram-trade-bot",
@@ -250,7 +250,7 @@ export const projects: Project[] = [
     tags: ["Python", "Trading", "Telegram API", "Automation"],
     status: "Learning Project",
     category: "Backend",
-    why: "Automation meets finance — executing real trades from a chat interface.",
+    why: "Automation meets finance - executing real trades from a chat interface.",
   },
   {
     slug: "christmas-list",
@@ -261,7 +261,7 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/christmasList",
     status: "Archived",
     category: "Full Stack",
-    why: "Creative rethinking of a tired concept (gift registries) with unit-based purchasing — product innovation.",
+    why: "Creative rethinking of a tired concept (gift registries) with unit-based purchasing - product innovation.",
   },
   {
     slug: "tribe-canvas",
@@ -272,7 +272,7 @@ export const projects: Project[] = [
     githubUrl: "https://github.com/OnuegbuUdochukwu/tribe-canvas",
     status: "Archived",
     category: "Full Stack",
-    why: "Supporting Nigerian artists through tech — a project with cultural purpose.",
+    why: "Supporting Nigerian artists through tech - a project with cultural purpose.",
   },
 ] as const;
 
@@ -282,7 +282,7 @@ export const usesCategories = [
   {
     title: "Editor & Terminal",
     items: [
-      { label: "Editor", value: "VS Code — with JetBrains Mono, minimal theme" },
+      { label: "Editor", value: "VS Code - with JetBrains Mono, minimal theme" },
       { label: "Terminal", value: "iTerm2 + zsh + Oh My Zsh" },
       { label: "Font", value: "JetBrains Mono for code, DM Sans everywhere else" },
     ],
@@ -307,15 +307,15 @@ export const usesCategories = [
   {
     title: "Hardware",
     items: [
-      { label: "Laptop", value: "HP — dependable, does the job" },
-      { label: "Monitor", value: "24\" external — because one screen is never enough" },
+      { label: "Laptop", value: "HP - dependable, does the job" },
+      { label: "Monitor", value: "24\" external - because one screen is never enough" },
     ],
   },
   {
     title: "Music While Coding",
     items: [
       { label: "Genre", value: "Lo-fi, ambient, or deep focus instrumentals" },
-      { label: "Vibe", value: "Something rhythmic but wordless — keeps the flow state intact" },
+      { label: "Vibe", value: "Something rhythmic but wordless - keeps the flow state intact" },
     ],
   },
 ] as const;

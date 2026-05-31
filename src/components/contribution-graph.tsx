@@ -87,7 +87,7 @@ export default function ContributionGraph() {
     <div className="w-full">
       <div className="flex items-baseline gap-2 mb-3">
         <span className="font-medium text-sm text-fg">
-          {isReady ? effectiveData.totalContributions.toLocaleString() : "—"} contributions
+          {isReady ? effectiveData.totalContributions.toLocaleString() : "-"} contributions
         </span>
         <span className="text-xs text-fg-muted">in the last year</span>
       </div>

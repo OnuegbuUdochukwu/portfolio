@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import Section from "@/components/section";
 
 const photos: { src: string; alt: string; w: number; h: number }[] = [
-  // Placeholder photos — replace with real images
+  // Placeholder photos - replace with real images
 ];
 
 export default function PhotosPage() {

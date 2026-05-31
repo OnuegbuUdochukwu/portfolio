@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Udochukwu Onuegbu — Backend & AI Engineer",
+  title: "Udochukwu Onuegbu - Backend & AI Engineer",
   description:
     "Backend & AI Engineer in Training. Final year @ Covenant University. 4.89 GPA. 1,400+ contributions.",
 };
