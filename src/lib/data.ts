@@ -1,5 +1,7 @@
-export const resumeUrl =
-  "https://drive.google.com/file/d/1DkULK-TCAs1nEKtQ87jBBHYCzab-F1BZ/view";
+const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
+export const resumeUrl = apiBase
+  ? `${apiBase}/api/resume/pdf`
+  : "https://drive.google.com/file/d/1DkULK-TCAs1nEKtQ87jBBHYCzab-F1BZ/view";
 
 export const site = {
   name: "Udochukwu Onuegbu",
