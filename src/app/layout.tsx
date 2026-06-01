@@ -3,6 +3,7 @@ import { DM_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import { BackendWarmup } from "@/components/backend-warmup";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
       className={`${dmSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">
+        <BackendWarmup />
         <Navigation />
         <main className="flex-1 pt-24">{children}</main>
         <Footer />
