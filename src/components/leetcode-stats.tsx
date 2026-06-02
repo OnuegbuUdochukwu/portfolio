@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
-const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
-
 interface LeetCodeData {
   totalSolved: number;
   easySolved: number;
@@ -34,16 +32,11 @@ export default function LeetCodeStats() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!apiBase) {
-      setLoading(false);
-      return;
-    }
-
     let cancelled = false;
 
     async function fetchStats() {
       try {
-        const res = await fetch(`${apiBase}/api/leetcode/stats`);
+        const res = await fetch("/api/leetcode/stats");
         if (!res.ok) throw new Error("API error");
         const json: LeetCodeData = await res.json();
         if (!cancelled) {
