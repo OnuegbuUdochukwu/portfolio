@@ -292,15 +292,15 @@ export const usesCategories = [
   {
     title: "Languages",
     items: [
-      { label: "Primary", value: "Java, Python, TypeScript" },
-      { label: "Secondary", value: "JavaScript, C, C++, SQL" },
+      { label: "Primary", value: "Java, Python" },
+      { label: "Secondary", value: "JavaScript, TypeScript, C, C++, SQL" },
       { label: "Learning", value: "Go, Rust" },
     ],
   },
   {
     title: "Frameworks & Tools",
     items: [
-      { label: "Backend", value: "Spring Boot, Flask, Express" },
+      { label: "Backend", value: "Spring Boot, Flask, Express, FastAPI" },
       { label: "Frontend", value: "React, Next.js, Tailwind CSS" },
       { label: "Databases", value: "PostgreSQL, SQLite" },
       { label: "DevOps", value: "Docker, Git, HCL" },
