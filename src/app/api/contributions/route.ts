@@ -31,42 +31,27 @@ function contributionCountToLevel(count: number): number {
 }
 
 function calculateStreak(days: { date: string; count: number }[]): number {
-  const sorted = [...days]
-    .filter((d) => d.count > 0)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const activeDays = new Set(
+    days.filter((d) => d.count > 0).map((d) => d.date)
+  );
 
   let streak = 0;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  let checkDate = new Date();
 
-  for (let i = 0; i < sorted.length; i++) {
-    const expected = new Date(today);
-    expected.setDate(expected.getDate() - streak - (streak === 0 ? 0 : 1));
+  while (true) {
+    const dateStr = checkDate.toISOString().split("T")[0];
 
-    const dayDate = new Date(sorted[i].date);
-    dayDate.setHours(0, 0, 0, 0);
-
-    if (streak === 0) {
-      const diff = Math.round(
-        (today.getTime() - dayDate.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      if (diff === 0 || diff === 1) {
-        streak = 1;
+    if (activeDays.has(dateStr)) {
+      streak++;
+      checkDate.setDate(checkDate.getDate() - 1);
+    } else {
+      if (
+        streak === 0 &&
+        checkDate.toDateString() === new Date().toDateString()
+      ) {
+        checkDate.setDate(checkDate.getDate() - 1);
         continue;
       }
-      break;
-    }
-
-    const expectedDate = new Date(today);
-    expectedDate.setDate(expectedDate.getDate() - streak);
-    expectedDate.setHours(0, 0, 0, 0);
-
-    const diff = Math.round(
-      (expectedDate.getTime() - dayDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    if (diff === 1) {
-      streak++;
-    } else {
       break;
     }
   }

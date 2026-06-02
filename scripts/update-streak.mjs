@@ -50,38 +50,27 @@ const flattened = allDays.map((d) => ({
   count: d.contributionCount,
 }));
 
-const sorted = [...flattened]
-  .filter((d) => d.count > 0)
-  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const activeDays = new Set(
+  flattened.filter((d) => d.count > 0).map((d) => d.date)
+);
 
 let streak = 0;
-const today = new Date();
-today.setHours(0, 0, 0, 0);
+let checkDate = new Date();
 
-for (let i = 0; i < sorted.length; i++) {
-  if (streak === 0) {
-    const diff = Math.round(
-      (today.getTime() - new Date(sorted[i].date).getTime()) /
-        (1000 * 60 * 60 * 24)
-    );
-    if (diff === 0 || diff === 1) {
-      streak = 1;
+while (true) {
+  const dateStr = checkDate.toISOString().split("T")[0];
+
+  if (activeDays.has(dateStr)) {
+    streak++;
+    checkDate.setDate(checkDate.getDate() - 1);
+  } else {
+    if (
+      streak === 0 &&
+      checkDate.toDateString() === new Date().toDateString()
+    ) {
+      checkDate.setDate(checkDate.getDate() - 1);
       continue;
     }
-    break;
-  }
-
-  const expectedDate = new Date(today);
-  expectedDate.setDate(expectedDate.getDate() - streak);
-  expectedDate.setHours(0, 0, 0, 0);
-
-  const diff = Math.round(
-    (expectedDate.getTime() - new Date(sorted[i].date).getTime()) /
-      (1000 * 60 * 60 * 24)
-  );
-  if (diff === 1) {
-    streak++;
-  } else {
     break;
   }
 }
