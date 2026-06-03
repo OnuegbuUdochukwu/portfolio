@@ -35,6 +35,7 @@ export default function ContributionGraph() {
   const [error, setError] = useState(false);
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
   const [tooltipAbove, setTooltipAbove] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -202,6 +203,7 @@ export default function ContributionGraph() {
                             height: rect.height,
                           });
                         }
+                        setSelectedDate((prev) => (prev === day.date ? null : day.date));
                       }}
                     >
                       <motion.div
@@ -260,6 +262,24 @@ export default function ContributionGraph() {
               ))}
             </div>
           </>
+        );
+      }      )()}
+      {isReady && selectedDate && (() => {
+        const day = effectiveData.days.find((d) => d.date === selectedDate);
+        if (!day) return null;
+        const date = new Date(day.date + "T00:00:00Z");
+        const formatted = date.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+        return (
+          <div className="flex items-center gap-1.5 mt-2 text-[10px] text-fg-muted font-mono">
+            <span className="font-medium text-fg">{formatted}</span>
+            <span>·</span>
+            <span>{day.count > 0 ? `${day.count} contribution${day.count !== 1 ? "s" : ""}` : "No contributions"}</span>
+          </div>
         );
       })()}
       {tooltip && (() => {
