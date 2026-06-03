@@ -236,18 +236,30 @@ export default function ContributionGraph() {
         });
         const mostActiveIdx = dowTotals.indexOf(Math.max(...dowTotals));
         const dayNames = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"];
+        const dowLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const maxDow = Math.max(...dowTotals);
         return (
-          <div className="flex items-center gap-1.5 mt-2 text-[10px] text-fg-muted font-mono">
-            <span>Best day: {best.count} commits</span>
-            <span>·</span>
-            <span>Most active: {dayNames[mostActiveIdx]}</span>
-            {effectiveData.currentStreak > 0 && (
-              <>
-                <span>·</span>
-                <span>Streak: {effectiveData.currentStreak}d</span>
-              </>
-            )}
-          </div>
+          <>
+            <div className="flex items-center gap-1.5 mt-2 text-[10px] text-fg-muted font-mono">
+              <span>Best day: {best.count} commits</span>
+              <span>·</span>
+              <span>Most active: {dayNames[mostActiveIdx]}</span>
+              {effectiveData.currentStreak > 0 && (
+                <>
+                  <span>·</span>
+                  <span>Streak: {effectiveData.currentStreak}d</span>
+                </>
+              )}
+            </div>
+            <div className="flex flex-col gap-[2px] mt-2">
+              {dowTotals.map((total, i) => (
+                <div key={i} className="flex items-center gap-2 text-[10px] font-mono">
+                  <span className="w-[28px] text-right text-fg-muted shrink-0">{dowLabels[i]}</span>
+                  <div className="h-2 rounded-sm bg-[#40C463]" style={{ width: `${Math.round((total / maxDow) * 100)}%` }} />
+                </div>
+              ))}
+            </div>
+          </>
         );
       })()}
       {tooltip && (() => {
