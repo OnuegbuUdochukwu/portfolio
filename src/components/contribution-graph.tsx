@@ -228,6 +228,28 @@ export default function ContributionGraph() {
         ))}
         <span className="text-[10px] text-fg-muted">More</span>
       </div>
+      {isReady && effectiveData.days.length > 0 && (() => {
+        const best = effectiveData.days.reduce((b, d) => d.count > b.count ? d : b);
+        const dowTotals = [0, 0, 0, 0, 0, 0, 0];
+        effectiveData.days.forEach((d) => {
+          dowTotals[new Date(d.date + "T00:00:00Z").getDay()] += d.count;
+        });
+        const mostActiveIdx = dowTotals.indexOf(Math.max(...dowTotals));
+        const dayNames = ["Sundays", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays"];
+        return (
+          <div className="flex items-center gap-1.5 mt-2 text-[10px] text-fg-muted font-mono">
+            <span>Best day: {best.count} commits</span>
+            <span>·</span>
+            <span>Most active: {dayNames[mostActiveIdx]}</span>
+            {effectiveData.currentStreak > 0 && (
+              <>
+                <span>·</span>
+                <span>Streak: {effectiveData.currentStreak}d</span>
+              </>
+            )}
+          </div>
+        );
+      })()}
       {tooltip && (() => {
         const cellCenterX = tooltip.left + tooltip.width / 2;
         const cellBottom = tooltip.top + tooltip.height;
