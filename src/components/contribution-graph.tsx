@@ -98,6 +98,8 @@ export default function ContributionGraph() {
     });
   }
 
+  const todayStr = new Date().toISOString().split("T")[0];
+
   const dayRowLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
 
   return (
@@ -152,7 +154,7 @@ export default function ContributionGraph() {
                       transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
                       className={`w-[10px] h-[10px] rounded-sm ${
                         day ? levels[day.level] : "bg-transparent"
-                      }`}
+                      } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""}`}
                       title={day ? `${day.date}: ${day.count} contributions` : undefined}
                     />
                   ))}
