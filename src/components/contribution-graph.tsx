@@ -18,12 +18,23 @@ interface ApiResponse {
   endDate: string;
 }
 
+interface TooltipData {
+  date: string;
+  count: number;
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
 const levels = ["bg-[#EBEDF0]", "bg-[#9BE9A8]", "bg-[#40C463]", "bg-[#30A14E]", "bg-[#216E39]"];
 
 export default function ContributionGraph() {
   const [data, setData] = useState<{ days: Day[]; totalContributions: number; startDate: string; endDate: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [tooltip, setTooltip] = useState<TooltipData | null>(null);
+  const [tooltipAbove, setTooltipAbove] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +66,13 @@ export default function ContributionGraph() {
     fetchData();
     return () => { cancelled = true; };
   }, []);
+
+  useEffect(() => {
+    if (!tooltip) return;
+    const handler = () => setTooltip(null);
+    window.addEventListener("click", handler);
+    return () => window.removeEventListener("click", handler);
+  }, [tooltip]);
 
   const effectiveData = data || (error ? fallbackData : null);
   const isReady = !loading && effectiveData;
@@ -146,17 +164,50 @@ export default function ContributionGraph() {
               {isReady && weeks.map((week, wi) => (
                 <div key={wi} className="flex flex-col gap-[3px]">
                   {week.map((day, di) => (
-                    <motion.div
-                      key={`${wi}-${di}`}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
-                      className={`w-[10px] h-[10px] rounded-sm ${
-                        day ? levels[day.level] : "bg-transparent"
-                      } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""}`}
-                      title={day ? `${day.date}: ${day.count} contributions` : undefined}
-                    />
+                    <div
+                      onMouseEnter={(e) => {
+                        if (!day) return;
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setTooltipAbove(rect.top > 120);
+                        setTooltip({
+                          date: day.date,
+                          count: day.count,
+                          left: rect.left,
+                          top: rect.top,
+                          width: rect.width,
+                          height: rect.height,
+                        });
+                      }}
+                      onMouseLeave={() => setTooltip(null)}
+                      onClick={(e) => {
+                        if (!day) return;
+                        e.stopPropagation();
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        if (tooltip?.date === day.date) {
+                          setTooltip(null);
+                        } else {
+                          setTooltipAbove(rect.top > 120);
+                          setTooltip({
+                            date: day.date,
+                            count: day.count,
+                            left: rect.left,
+                            top: rect.top,
+                            width: rect.width,
+                            height: rect.height,
+                          });
+                        }
+                      }}
+                    >
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
+                        className={`w-[10px] h-[10px] rounded-sm ${
+                          day ? levels[day.level] : "bg-transparent"
+                        } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""} cursor-pointer`}
+                      />
+                    </div>
                   ))}
                 </div>
               ))}
@@ -171,6 +222,38 @@ export default function ContributionGraph() {
         ))}
         <span className="text-[10px] text-fg-muted">More</span>
       </div>
+      {tooltip && (() => {
+        const cellCenterX = tooltip.left + tooltip.width / 2;
+        const cellBottom = tooltip.top + tooltip.height;
+        const date = new Date(tooltip.date + "T00:00:00Z");
+        const formatted = date.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+        const label =
+          tooltip.count > 0
+            ? `${tooltip.count} contribution${tooltip.count !== 1 ? "s" : ""}`
+            : "No contributions";
+        return (
+          <div
+            style={{
+              position: "fixed",
+              left: cellCenterX + "px",
+              top: tooltipAbove ? tooltip.top - 8 + "px" : cellBottom + 8 + "px",
+              transform: tooltipAbove ? "translate(-50%,-100%)" : "translate(-50%,0)",
+              zIndex: 50,
+              pointerEvents: "none",
+            }}
+          >
+            <div className="bg-bg border border-border rounded-md px-3 py-1.5 shadow-lg text-xs whitespace-nowrap">
+              <span className="font-medium text-fg">{formatted}</span>
+              <span className="text-fg-muted ml-1.5 font-mono">· {label}</span>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
