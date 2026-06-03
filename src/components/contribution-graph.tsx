@@ -36,6 +36,7 @@ export default function ContributionGraph() {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
   const [tooltipAbove, setTooltipAbove] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [hoveredWeek, setHoveredWeek] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -169,9 +170,15 @@ export default function ContributionGraph() {
                 </>
               )}
               {isReady && weeks.map((week, wi) => (
-                <div key={wi} className="flex flex-col gap-[3px]">
-                  {week.map((day, di) => (
-                    <div
+                <div
+                  key={wi}
+                  className="flex flex-col gap-[3px]"
+                  onMouseEnter={() => setHoveredWeek(wi)}
+                  onMouseLeave={() => setHoveredWeek(null)}
+                >
+                  {week.map((day, di) => {
+                    const dim = hoveredWeek !== null && hoveredWeek !== wi;
+                    return <div
                       onMouseEnter={(e) => {
                         if (!day) return;
                         const rect = e.currentTarget.getBoundingClientRect();
@@ -211,12 +218,13 @@ export default function ContributionGraph() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
-                        className={`w-[10px] h-[10px] rounded-sm ${
+                        className={`w-[10px] h-[10px] rounded-sm transition-opacity duration-200 ${
                           day ? levels[day.level] : "bg-transparent"
-                        } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""} cursor-pointer`}
+                        } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""} cursor-pointer ${dim ? "opacity-40" : ""}`}
                       />
                     </div>
-                  ))}
+                })}
+                  
                 </div>
               ))}
             </div>
