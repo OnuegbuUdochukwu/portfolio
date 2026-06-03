@@ -127,4 +127,5 @@ export const fallbackData = {
   totalContributions: data.reduce((s, d) => s + d.count, 0),
   startDate: "2025-06-01",
   endDate: "2026-05-26",
+  currentStreak: 0,
 };

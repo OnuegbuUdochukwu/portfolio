@@ -30,7 +30,7 @@ interface TooltipData {
 const levels = ["bg-[#EBEDF0]", "bg-[#9BE9A8]", "bg-[#40C463]", "bg-[#30A14E]", "bg-[#216E39]"];
 
 export default function ContributionGraph() {
-  const [data, setData] = useState<{ days: Day[]; totalContributions: number; startDate: string; endDate: string } | null>(null);
+  const [data, setData] = useState<{ days: Day[]; totalContributions: number; startDate: string; endDate: string; currentStreak: number } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
@@ -52,6 +52,7 @@ export default function ContributionGraph() {
             totalContributions: json.totalContributions,
             startDate: json.startDate,
             endDate: json.endDate,
+            currentStreak: json.currentStreak,
           });
           setLoading(false);
         }
@@ -127,6 +128,11 @@ export default function ContributionGraph() {
           {isReady ? effectiveData.totalContributions.toLocaleString() : "-"} contributions
         </span>
         <span className="text-xs text-fg-muted">in the last year</span>
+        {isReady && effectiveData.currentStreak > 0 && (
+          <span className="text-[10px] text-emerald-500 font-mono ml-1">
+            ● {effectiveData.currentStreak}d streak
+          </span>
+        )}
       </div>
       <div className="overflow-x-auto pb-2">
         <div className="flex min-w-fit">
