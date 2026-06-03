@@ -83,6 +83,23 @@ export default function ContributionGraph() {
     if (currentWeek.length > 0) weeks.push(currentWeek);
   }
 
+  const monthColumns: (string | null)[] = Array(weeks.length).fill(null);
+  if (weeks.length > 0) {
+    let lastMonth = -1;
+    weeks.forEach((week, wi) => {
+      const firstRealDay = week.find((d) => d !== null);
+      if (firstRealDay) {
+        const d = new Date(firstRealDay.date + "T00:00:00Z");
+        if (d.getMonth() !== lastMonth) {
+          monthColumns[wi] = d.toLocaleString("en-US", { month: "short" });
+          lastMonth = d.getMonth();
+        }
+      }
+    });
+  }
+
+  const dayRowLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
+
   return (
     <div className="w-full">
       <div className="flex items-baseline gap-2 mb-3">
@@ -92,35 +109,57 @@ export default function ContributionGraph() {
         <span className="text-xs text-fg-muted">in the last year</span>
       </div>
       <div className="overflow-x-auto pb-2">
-        <div className="flex gap-[3px] min-w-fit">
-          {loading && (
-            <>
-              {Array.from({ length: 53 }).map((_, wi) => (
+        <div className="flex min-w-fit">
+          {isReady && (
+            <div className="flex flex-col gap-[3px] pt-[13px] mr-1 shrink-0">
+              {dayRowLabels.map((label, i) => (
+                <div key={i} className="h-[10px] flex items-center text-[10px] text-fg-muted font-mono leading-none">
+                  {label}
+                </div>
+              ))}
+            </div>
+          )}
+          <div>
+            {isReady && (
+              <div className="flex gap-[3px] text-[10px] text-fg-muted font-mono mb-[3px] h-[13px] items-end">
+                {weeks.map((_, wi) => (
+                  <div key={wi} className="w-[10px] leading-none overflow-visible whitespace-nowrap text-center">
+                    {monthColumns[wi] || ""}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex gap-[3px]">
+              {loading && (
+                <>
+                  {Array.from({ length: 53 }).map((_, wi) => (
+                    <div key={wi} className="flex flex-col gap-[3px]">
+                      {Array.from({ length: 7 }).map((_, di) => (
+                        <div key={di} className="w-[10px] h-[10px] rounded-sm bg-[#EBEDF0] animate-pulse" />
+                      ))}
+                    </div>
+                  ))}
+                </>
+              )}
+              {isReady && weeks.map((week, wi) => (
                 <div key={wi} className="flex flex-col gap-[3px]">
-                  {Array.from({ length: 7 }).map((_, di) => (
-                    <div key={di} className="w-[10px] h-[10px] rounded-sm bg-[#EBEDF0] animate-pulse" />
+                  {week.map((day, di) => (
+                    <motion.div
+                      key={`${wi}-${di}`}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
+                      className={`w-[10px] h-[10px] rounded-sm ${
+                        day ? levels[day.level] : "bg-transparent"
+                      }`}
+                      title={day ? `${day.date}: ${day.count} contributions` : undefined}
+                    />
                   ))}
                 </div>
               ))}
-            </>
-          )}
-          {isReady && weeks.map((week, wi) => (
-            <div key={wi} className="flex flex-col gap-[3px]">
-              {week.map((day, di) => (
-                <motion.div
-                  key={`${wi}-${di}`}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
-                  className={`w-[10px] h-[10px] rounded-sm ${
-                    day ? levels[day.level] : "bg-transparent"
-                  }`}
-                  title={day ? `${day.date}: ${day.count} contributions` : undefined}
-                />
-              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
       <div className="flex items-center gap-1 mt-2 justify-end">
