@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { fallbackData } from "./contribution-fallback";
 
 interface Day {
@@ -45,6 +45,12 @@ export default function ContributionGraph() {
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
+
+  useEffect(() => {
+    if (!tooltip) return;
+    const timer = setTimeout(() => setTooltip(null), 3500);
+    return () => clearTimeout(timer);
+  }, [tooltip]);
 
   useEffect(() => {
     let cancelled = false;
@@ -293,38 +299,45 @@ export default function ContributionGraph() {
           </div>
         );
       })()}
-      {tooltip && (() => {
-        const cellCenterX = tooltip.left + tooltip.width / 2;
-        const cellBottom = tooltip.top + tooltip.height;
-        const date = new Date(tooltip.date + "T00:00:00Z");
-        const formatted = date.toLocaleDateString("en-US", {
-          weekday: "short",
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        });
-        const label =
-          tooltip.count > 0
-            ? `${tooltip.count} contribution${tooltip.count !== 1 ? "s" : ""}`
-            : "No contributions";
-        return (
-          <div
-            style={{
-              position: "fixed",
-              left: cellCenterX + "px",
-              top: tooltipAbove ? tooltip.top - 8 + "px" : cellBottom + 8 + "px",
-              transform: tooltipAbove ? "translate(-50%,-100%)" : "translate(-50%,0)",
-              zIndex: 50,
-              pointerEvents: "none",
-            }}
-          >
-            <div className="bg-bg border border-border rounded-md px-3 py-1.5 shadow-lg text-xs max-sm:text-[10px] max-sm:px-2 max-sm:py-1 whitespace-nowrap">
-              <span className="font-medium text-fg">{formatted}</span>
-              <span className="text-fg-muted ml-1.5 font-mono">· {label}</span>
-            </div>
-          </div>
-        );
-      })()}
+      <AnimatePresence>
+        {tooltip && (() => {
+          const cellCenterX = tooltip.left + tooltip.width / 2;
+          const cellBottom = tooltip.top + tooltip.height;
+          const date = new Date(tooltip.date + "T00:00:00Z");
+          const formatted = date.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          const label =
+            tooltip.count > 0
+              ? `${tooltip.count} contribution${tooltip.count !== 1 ? "s" : ""}`
+              : "No contributions";
+          return (
+            <motion.div
+              key="tooltip"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{
+                position: "fixed",
+                left: cellCenterX + "px",
+                top: tooltipAbove ? tooltip.top - 8 + "px" : cellBottom + 8 + "px",
+                transform: tooltipAbove ? "translate(-50%,-100%)" : "translate(-50%,0)",
+                zIndex: 50,
+                pointerEvents: "none",
+              }}
+            >
+              <div className="bg-bg border border-border rounded-md px-3 py-1.5 shadow-lg text-xs max-sm:text-[10px] max-sm:px-2 max-sm:py-1 whitespace-nowrap">
+                <span className="font-medium text-fg">{formatted}</span>
+                <span className="text-fg-muted ml-1.5 font-mono">· {label}</span>
+              </div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
     </div>
   );
 }
