@@ -6,6 +6,7 @@ import ContributionGraph from "@/components/contribution-graph";
 import LanguageBar from "@/components/language-bar";
 import StatusLine from "@/components/status-line";
 import LeetCodeStats from "@/components/leetcode-stats";
+import CodeWarsStats from "@/components/codewars-stats";
 import { site, quotes } from "@/lib/data";
 
 export default function Home() {
@@ -124,6 +125,9 @@ export default function Home() {
           Algorithmic consistency
         </p>
         <LeetCodeStats />
+        <div className="mt-6 pt-4 border-t border-border">
+          <CodeWarsStats />
+        </div>
         <p className="text-xs text-fg-muted mt-3">
           Data structures and algorithms. The part of engineering that has nothing to do with frameworks.
         </p>
