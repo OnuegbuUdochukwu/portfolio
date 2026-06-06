@@ -37,6 +37,15 @@ export default function ContributionGraph() {
   const [tooltipAbove, setTooltipAbove] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [hoveredWeek, setHoveredWeek] = useState<number | null>(null);
+  const [canHover, setCanHover] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    setCanHover(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setCanHover(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -180,7 +189,7 @@ export default function ContributionGraph() {
                     const dim = hoveredWeek !== null && hoveredWeek !== wi;
                     return <div
                       onMouseEnter={(e) => {
-                        if (!day) return;
+                        if (!canHover || !day) return;
                         const rect = e.currentTarget.getBoundingClientRect();
                         setTooltipAbove(rect.top > 120);
                         setTooltip({
@@ -192,7 +201,7 @@ export default function ContributionGraph() {
                           height: rect.height,
                         });
                       }}
-                      onMouseLeave={() => setTooltip(null)}
+                      onMouseLeave={() => { if (canHover) setTooltip(null); }}
                       onClick={(e) => {
                         if (!day) return;
                         e.stopPropagation();
