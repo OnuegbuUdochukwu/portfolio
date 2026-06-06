@@ -241,11 +241,11 @@ export default function ContributionGraph() {
         </div>
       </div>
       <div className="flex items-center gap-1 mt-2 justify-end">
-        <span className="text-[10px] text-fg-muted">Less</span>
+        <span className="text-[10px] max-sm:text-[8px] text-fg-muted">Less</span>
         {levels.map((l, i) => (
-          <div key={i} className={`w-[10px] h-[10px] rounded-sm ${l}`} />
+          <div key={i} className={`w-[10px] h-[10px] max-sm:w-[7px] max-sm:h-[7px] rounded-sm ${l}`} />
         ))}
-        <span className="text-[10px] text-fg-muted">More</span>
+        <span className="text-[10px] max-sm:text-[8px] text-fg-muted">More</span>
       </div>
       {isReady && effectiveData.days.length > 0 && (() => {
         const best = effectiveData.days.reduce((b, d) => d.count > b.count ? d : b);
