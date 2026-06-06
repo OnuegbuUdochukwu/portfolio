@@ -36,7 +36,6 @@ export default function ContributionGraph() {
   const [tooltip, setTooltip] = useState<TooltipData | null>(null);
   const [tooltipAbove, setTooltipAbove] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [hoveredWeek, setHoveredWeek] = useState<number | null>(null);
   const [canHover, setCanHover] = useState(true);
 
   useEffect(() => {
@@ -178,15 +177,21 @@ export default function ContributionGraph() {
                   ))}
                 </>
               )}
-              {isReady && weeks.map((week, wi) => (
+              {isReady && weeks.map((week, wi) => {
+                const selectedWeekIndex = (() => {
+                  if (!selectedDate) return null;
+                  for (let w = 0; w < weeks.length; w++) {
+                    if (weeks[w].some(d => d && d.date === selectedDate)) return w;
+                  }
+                  return null;
+                })();
+                const dim = selectedWeekIndex !== null && selectedWeekIndex !== wi;
+                return (
                 <div
                   key={wi}
                   className="flex flex-col gap-[3px] max-sm:gap-[2px]"
-                  onMouseEnter={() => setHoveredWeek(wi)}
-                  onMouseLeave={() => setHoveredWeek(null)}
                 >
                   {week.map((day, di) => {
-                    const dim = hoveredWeek !== null && hoveredWeek !== wi;
                     return <div
                       onMouseEnter={(e) => {
                         if (!canHover || !day) return;
@@ -229,13 +234,14 @@ export default function ContributionGraph() {
                         transition={{ duration: 0.2, delay: wi * 0.003 + di * 0.002 }}
                         className={`w-[10px] h-[10px] max-sm:w-[7px] max-sm:h-[7px] rounded-sm transition-opacity duration-200 ${
                           day ? levels[day.level] : "bg-transparent"
-                        } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""} cursor-pointer ${dim ? "opacity-40" : ""}`}
+                        } ${day && day.date === todayStr ? "ring-1 ring-fg/30" : ""} cursor-pointer ${dim ? "opacity-15" : ""}`}
                       />
                     </div>
                 })}
                   
                 </div>
-              ))}
+              );
+            })}
             </div>
           </div>
         </div>
@@ -268,7 +274,7 @@ export default function ContributionGraph() {
             )}
           </div>
         );
-      }      )()}
+      })()}
       {isReady && selectedDate && (() => {
         const day = effectiveData.days.find((d) => d.date === selectedDate);
         if (!day) return null;
