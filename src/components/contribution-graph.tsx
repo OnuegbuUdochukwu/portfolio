@@ -48,7 +48,7 @@ export default function ContributionGraph() {
 
   useEffect(() => {
     if (!tooltip) return;
-    const timer = setTimeout(() => setTooltip(null), 3500);
+    const timer = setTimeout(() => setTooltip(null), 1750);
     return () => clearTimeout(timer);
   }, [tooltip]);
 
