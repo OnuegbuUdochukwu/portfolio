@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site, resumeUrl } from "@/lib/data";
 
 export default function Footer() {
@@ -40,6 +41,13 @@ export default function Footer() {
           >
             Resume
           </a>
+          <span className="text-fg-muted">·</span>
+          <Link
+            href="/trending"
+            className="text-sm text-fg-muted hover:text-fg transition-colors duration-200"
+          >
+            Trending
+          </Link>
           <span className="text-fg-muted">·</span>
           <a
             href={`mailto:${site.email}`}
