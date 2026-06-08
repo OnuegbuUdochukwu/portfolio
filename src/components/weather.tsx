@@ -29,31 +29,36 @@ function timeAgo(iso: string): string {
 
 export default function Weather() {
   const [data, setData] = useState<WeatherData | null>(null);
+  const [hasError, setHasError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    let retries = 0;
-    const maxRetries = 30;
 
     async function fetchWeather() {
       try {
+        setLoading(true);
         const res = await fetch("/api/weather");
         if (!res.ok) throw new Error("API error");
         const json: WeatherData = await res.json();
-        if (!cancelled) setData(json);
-      } catch {
-        if (!cancelled && ++retries < maxRetries) {
-          const delay = Math.min(30000 * retries, 300000);
-          setTimeout(fetchWeather, delay);
+        if (!cancelled) {
+          setData(json);
+          setHasError(false);
         }
+      } catch (error) {
+        console.error("Weather fetch failed:", error);
+        if (!cancelled) setHasError(true);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
+
     fetchWeather();
-    const interval = setInterval(() => { retries = 0; fetchWeather(); }, 600000);
+    const interval = setInterval(fetchWeather, 600000);
     return () => { cancelled = true; clearInterval(interval); };
   }, []);
 
-  if (!data) {
+  if (loading) {
     return (
       <div className="flex items-center gap-4 animate-pulse">
         <div className="w-14 h-14 bg-border rounded-full" />
@@ -64,6 +69,16 @@ export default function Weather() {
       </div>
     );
   }
+
+  if (hasError) {
+    return (
+      <p className="text-xs text-fg-muted font-mono">
+        Unable to load weather details right now.
+      </p>
+    );
+  }
+
+  if (!data) return null;
 
   return (
     <div className="flex items-center gap-4">
