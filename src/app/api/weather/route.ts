@@ -1,32 +1,32 @@
-const API_KEY = process.env.OPENWEATHER_API_KEY;
-const CITY = "Lagos";
-const COUNTRY = "NG";
-const BASE = "https://api.openweathermap.org/data/2.5/weather";
+const LAT = 6.4541;
+const LON = 3.3947;
+const BASE = "https://api.open-meteo.com/v1/forecast";
 
 export async function GET() {
-  if (!API_KEY) {
-    return Response.json({ error: "No API key configured" }, { status: 500 });
-  }
-
   try {
-    const url = `${BASE}?q=${CITY},${COUNTRY}&units=metric&appid=${API_KEY}`;
+    const params = new URLSearchParams({
+      latitude: String(LAT),
+      longitude: String(LON),
+      current: "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m",
+    });
+    const url = `${BASE}?${params}`;
     const res = await fetch(url, { next: { revalidate: 600 } });
     if (!res.ok) {
       const errText = await res.text();
-      console.error("OpenWeatherMap error:", res.status, errText);
+      console.error("Open-Meteo error:", res.status, errText);
       return Response.json({ error: "Weather API error" }, { status: 502 });
     }
     const data = await res.json();
+    const current = data.current;
     return Response.json({
-      temp: Math.round(data.main.temp),
-      feels_like: Math.round(data.main.feels_like),
-      humidity: data.main.humidity,
-      wind_speed: data.wind.speed,
-      description: data.weather[0].description,
-      icon: data.weather[0].icon,
-      city: data.name,
-      country: data.sys.country,
-      lastUpdated: new Date().toISOString(),
+      temp: Math.round(current.temperature_2m),
+      feels_like: Math.round(current.apparent_temperature),
+      humidity: current.relative_humidity_2m,
+      wind_speed: current.wind_speed_10m,
+      weather_code: current.weather_code,
+      city: "Lagos",
+      country: "NG",
+      lastUpdated: current.time,
     });
   } catch (err) {
     console.error("Failed to fetch weather:", err);
