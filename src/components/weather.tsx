@@ -29,10 +29,12 @@ function timeAgo(iso: string): string {
 
 export default function Weather() {
   const [data, setData] = useState<WeatherData | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
+    let retries = 0;
+    const maxRetries = 30;
+
     async function fetchWeather() {
       try {
         const res = await fetch("/api/weather");
@@ -40,17 +42,18 @@ export default function Weather() {
         const json: WeatherData = await res.json();
         if (!cancelled) setData(json);
       } catch {
-        /* silent */
-      } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled && ++retries < maxRetries) {
+          const delay = Math.min(30000 * retries, 300000);
+          setTimeout(fetchWeather, delay);
+        }
       }
     }
     fetchWeather();
-    const interval = setInterval(fetchWeather, 600000);
+    const interval = setInterval(() => { retries = 0; fetchWeather(); }, 600000);
     return () => { cancelled = true; clearInterval(interval); };
   }, []);
 
-  if (loading) {
+  if (!data) {
     return (
       <div className="flex items-center gap-4 animate-pulse">
         <div className="w-14 h-14 bg-border rounded-full" />
@@ -61,8 +64,6 @@ export default function Weather() {
       </div>
     );
   }
-
-  if (!data) return null;
 
   return (
     <div className="flex items-center gap-4">
