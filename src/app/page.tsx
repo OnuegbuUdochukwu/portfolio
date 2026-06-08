@@ -146,7 +146,7 @@ export default function Home() {
         </p>
         <Weather />
         <p className="text-xs text-fg-muted mt-3">
-          Live conditions in Lagos, Nigeria — refreshed every 10 minutes.
+          Live conditions in Lagos, Nigeria - refreshed every 10 minutes.
         </p>
       </motion.section>
     </div>

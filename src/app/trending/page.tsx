@@ -81,7 +81,7 @@ export default function TrendingPage() {
     <div className="mx-auto max-w-5xl px-6">
       <Section
         title="Trending in Backend"
-        subtitle="Daily scrape of Hacker News, Lobsters, Dev.to, and Reddit — filtered for backend content."
+        subtitle="Daily scrape of Hacker News, Lobsters, Dev.to, and Reddit - filtered for backend content."
       >
         <div className="max-w-3xl">
           {loading ? (
