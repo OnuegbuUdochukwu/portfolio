@@ -89,8 +89,21 @@ export const experience = [
 ] as const;
 
 export const tagGroups: Record<string, string[]> = {
-  Backend: ["Java", "Spring Boot", "REST APIs", "API Development", "Testing", "PostgreSQL", "Docker"],
-  Fintech: ["Cryptocurrency", "Community", "Trading"],
+  Backend: [
+    "Java", "Python", "TypeScript", "JavaScript",
+    "Spring Boot",
+    "REST APIs", "API Development", "Quidax API", "Telegram API",
+    "PostgreSQL", "Docker", "Testing",
+    "Real-time", "Automation",
+    "Algorithms", "Graph Algorithms",
+    "Backend",
+  ],
+  "API Development": [
+    "REST APIs", "API Development", "Quidax API", "Telegram API",
+  ],
+  Fintech: [
+    "Cryptocurrency", "Trading", "Fintech", "Community", "Quidax API",
+  ],
 };
 
 export const certifications = [
