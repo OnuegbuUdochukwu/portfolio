@@ -107,6 +107,11 @@ export const tagGroups: Record<string, string[]> = {
   ],
 };
 
+export function matchesTag(tags: readonly string[], tag: string): boolean {
+  const expanded = tagGroups[tag] ? [tag, ...tagGroups[tag]] : [tag];
+  return tags.some((t) => expanded.includes(t));
+}
+
 export const excludedFilterTags = ["Testing", "REST APIs"];
 export const extraFilterTags = ["Python"];
 

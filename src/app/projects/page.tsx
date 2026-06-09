@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Section from "@/components/section";
 import ProjectCard from "@/components/project-card";
-import { projects } from "@/lib/data";
+import { projects, matchesTag } from "@/lib/data";
 import type { ProjectCategory } from "@/lib/data";
 
 const categories: { label: string; value: ProjectCategory | "All" }[] = [
@@ -15,19 +16,26 @@ const categories: { label: string; value: ProjectCategory | "All" }[] = [
   { label: "Mobile", value: "Mobile" },
 ];
 
-export default function ProjectsPage() {
+function ProjectsContent() {
+  const searchParams = useSearchParams();
+  const tagFilter = searchParams.get("tag") || null;
   const [activeCategory, setActiveCategory] = useState<ProjectCategory | "All">("All");
 
-  const filtered =
-    activeCategory === "All"
-      ? projects
-      : projects.filter((p) => p.category === activeCategory);
+  const filtered = projects.filter((p) => {
+    const catMatch = activeCategory === "All" || p.category === activeCategory;
+    const tagMatch = !tagFilter || matchesTag(p.tags, tagFilter);
+    return catMatch && tagMatch;
+  });
 
   return (
     <div className="mx-auto max-w-5xl px-6">
       <Section
         title="Projects"
-        subtitle="Proof of work. Each project solves a real problem or teaches something new."
+        subtitle={
+          tagFilter
+            ? `Showing projects related to "${tagFilter}"`
+            : "Proof of work. Each project solves a real problem or teaches something new."
+        }
       >
         <div className="flex flex-wrap gap-2 mb-8">
           {categories.map((cat) => (
@@ -56,5 +64,13 @@ export default function ProjectsPage() {
         )}
       </Section>
     </div>
+  );
+}
+
+export default function ProjectsPage() {
+  return (
+    <Suspense>
+      <ProjectsContent />
+    </Suspense>
   );
 }

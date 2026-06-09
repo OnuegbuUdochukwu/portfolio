@@ -5,12 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import Section from "@/components/section";
 import TimelineEntry from "@/components/timeline-entry";
-import { education, experience, certifications, projects, tagGroups, excludedFilterTags, extraFilterTags } from "@/lib/data";
-
-function matchesTag(tags: readonly string[], tag: string): boolean {
-  const expanded = tagGroups[tag] ? [tag, ...tagGroups[tag]] : [tag];
-  return tags.some((t) => expanded.includes(t));
-}
+import { education, experience, certifications, projects, tagGroups, excludedFilterTags, extraFilterTags, matchesTag } from "@/lib/data";
 
 function WorkContent() {
   const searchParams = useSearchParams();
@@ -121,7 +116,7 @@ function WorkContent() {
               </p>
               {filteredProjects.length > 0 ? (
                 <div className="space-y-3">
-                  {filteredProjects.map((project) => (
+                  {filteredProjects.slice(0, 5).map((project) => (
                     <Link
                       key={project.slug}
                       href={`/projects/${project.slug}`}
@@ -150,6 +145,22 @@ function WorkContent() {
                       </div>
                     </Link>
                   ))}
+                  {filteredProjects.length > 5 && (
+                    <Link
+                      href={`/projects?tag=${encodeURIComponent(activeTag!)}`}
+                      className="inline-block text-xs font-mono text-accent hover:text-fg transition-colors duration-200 pt-1"
+                    >
+                      See all {filteredProjects.length} projects →
+                    </Link>
+                  )}
+                  {filteredProjects.length <= 5 && filteredProjects.length > 0 && (
+                    <Link
+                      href={`/projects?tag=${encodeURIComponent(activeTag!)}`}
+                      className="inline-block text-xs font-mono text-accent hover:text-fg transition-colors duration-200 pt-1"
+                    >
+                      View on projects page →
+                    </Link>
+                  )}
                 </div>
               ) : (
                 <p className="text-xs text-fg-muted font-mono">
