@@ -101,10 +101,14 @@ export const tagGroups: Record<string, string[]> = {
   "API Development": [
     "REST APIs", "API Development", "Quidax API", "Telegram API",
   ],
+  Cryptocurrency: ["Quidax API"],
   Fintech: [
     "Cryptocurrency", "Trading", "Fintech", "Community", "Quidax API",
   ],
 };
+
+export const excludedFilterTags = ["Testing", "REST APIs"];
+export const extraFilterTags = ["Python"];
 
 export const certifications = [
   { name: "Responsive Web Design", issuer: "freeCodeCamp", date: "Dec 2023" },

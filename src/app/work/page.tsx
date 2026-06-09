@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import Section from "@/components/section";
 import TimelineEntry from "@/components/timeline-entry";
-import { education, experience, certifications, projects, tagGroups } from "@/lib/data";
+import { education, experience, certifications, projects, tagGroups, excludedFilterTags, extraFilterTags } from "@/lib/data";
 
 function matchesTag(tags: readonly string[], tag: string): boolean {
   const expanded = tagGroups[tag] ? [tag, ...tagGroups[tag]] : [tag];
@@ -24,7 +24,11 @@ function WorkContent() {
   }, []);
 
   const groupKeys = Object.keys(tagGroups);
-  const individualTags = allTags.filter((t) => !groupKeys.includes(t));
+  const individualTags = allTags
+    .filter((t) => !groupKeys.includes(t))
+    .filter((t) => !excludedFilterTags.includes(t))
+    .concat(extraFilterTags)
+    .sort();
 
   const filtered = activeTag
     ? experience.filter((exp) => matchesTag(exp.tags, activeTag))
