@@ -1,10 +1,16 @@
 "use client";
 
 import { Suspense, useMemo } from "react";
+import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import Section from "@/components/section";
 import TimelineEntry from "@/components/timeline-entry";
-import { education, experience, certifications } from "@/lib/data";
+import { education, experience, certifications, projects, tagGroups } from "@/lib/data";
+
+function matchesTag(tags: readonly string[], tag: string): boolean {
+  const expanded = tagGroups[tag] ? [tag, ...tagGroups[tag]] : [tag];
+  return tags.some((t) => expanded.includes(t));
+}
 
 function WorkContent() {
   const searchParams = useSearchParams();
@@ -17,9 +23,16 @@ function WorkContent() {
     return Array.from(set).sort();
   }, []);
 
+  const groupKeys = Object.keys(tagGroups);
+  const individualTags = allTags.filter((t) => !groupKeys.includes(t));
+
   const filtered = activeTag
-    ? experience.filter((exp) => exp.tags.includes(activeTag as never))
+    ? experience.filter((exp) => matchesTag(exp.tags, activeTag))
     : experience;
+
+  const filteredProjects = activeTag
+    ? projects.filter((p) => matchesTag(p.tags, activeTag))
+    : [];
 
   function handleTagClick(tag: string) {
     const next = tag === activeTag ? null : tag;
@@ -56,7 +69,20 @@ function WorkContent() {
           >
             All
           </button>
-          {allTags.map((tag) => (
+          {groupKeys.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => handleTagClick(tag)}
+              className={`font-mono text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full border transition-colors duration-200 ${
+                activeTag === tag
+                  ? "bg-accent text-white border-accent"
+                  : "bg-transparent text-fg-muted border-border hover:border-accent-muted hover:text-fg"
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+          {individualTags.map((tag) => (
             <button
               key={tag}
               onClick={() => handleTagClick(tag)}
@@ -71,15 +97,62 @@ function WorkContent() {
           ))}
         </div>
 
-        <div className="max-w-2xl">
-          {filtered.length > 0 ? (
-            filtered.map((exp, i) => (
-              <TimelineEntry key={i} {...exp} activeTag={activeTag} onTagClick={handleTagClick} />
-            ))
-          ) : (
-            <p className="text-sm text-fg-muted font-mono">
-              No experiences tagged with &ldquo;{activeTag}&rdquo;.
-            </p>
+        <div className={activeTag ? "grid grid-cols-1 lg:grid-cols-2 gap-10" : "max-w-2xl"}>
+          <div className={activeTag ? "max-w-2xl" : ""}>
+            {filtered.length > 0 ? (
+              filtered.map((exp, i) => (
+                <TimelineEntry key={i} {...exp} activeTag={activeTag} onTagClick={handleTagClick} />
+              ))
+            ) : (
+              <p className="text-sm text-fg-muted font-mono">
+                No experiences tagged with &ldquo;{activeTag}&rdquo;.
+              </p>
+            )}
+          </div>
+
+          {activeTag && (
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-4">
+                Related Projects
+              </p>
+              {filteredProjects.length > 0 ? (
+                <div className="space-y-3">
+                  {filteredProjects.map((project) => (
+                    <Link
+                      key={project.slug}
+                      href={`/projects/${project.slug}`}
+                      className="block p-4 border border-border rounded-lg hover:border-accent-muted transition-colors duration-200"
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="text-sm font-medium text-fg hover:text-accent transition-colors duration-200">
+                          {project.name}
+                        </h4>
+                        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-accent-bg text-accent">
+                          {project.category}
+                        </span>
+                      </div>
+                      <p className="text-xs text-fg-muted leading-relaxed line-clamp-2">
+                        {project.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {project.tags.slice(0, 3).map((t) => (
+                          <span
+                            key={t}
+                            className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-border/40 text-fg-muted"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-fg-muted font-mono">
+                  No related projects for this tag.
+                </p>
+              )}
+            </div>
           )}
         </div>
       </Section>

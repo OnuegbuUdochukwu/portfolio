@@ -88,6 +88,11 @@ export const experience = [
   },
 ] as const;
 
+export const tagGroups: Record<string, string[]> = {
+  Backend: ["Java", "Spring Boot", "REST APIs", "API Development", "Testing", "PostgreSQL", "Docker"],
+  Fintech: ["Cryptocurrency", "Community", "Trading"],
+};
+
 export const certifications = [
   { name: "Responsive Web Design", issuer: "freeCodeCamp", date: "Dec 2023" },
   { name: "CS50 Introduction to Programming with Python", issuer: "Harvard / CS50", date: "2024" },
