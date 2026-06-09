@@ -1,20 +1,86 @@
 "use client";
 
+import { Suspense, useMemo } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Section from "@/components/section";
 import TimelineEntry from "@/components/timeline-entry";
 import { education, experience, certifications } from "@/lib/data";
 
-export default function WorkPage() {
+function WorkContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const activeTag = searchParams.get("tag") || null;
+
+  const allTags = useMemo(() => {
+    const set = new Set<string>();
+    experience.forEach((exp) => exp.tags.forEach((t) => set.add(t)));
+    return Array.from(set).sort();
+  }, []);
+
+  const filtered = activeTag
+    ? experience.filter((exp) => exp.tags.includes(activeTag as never))
+    : experience;
+
+  function handleTagClick(tag: string) {
+    const next = tag === activeTag ? null : tag;
+    const params = new URLSearchParams(searchParams.toString());
+    if (next) params.set("tag", next);
+    else params.delete("tag");
+    const qs = params.toString();
+    router.replace(`/work${qs ? `?${qs}` : ""}`, { scroll: false });
+  }
+
   return (
     <div className="mx-auto max-w-5xl px-6">
       <Section
         title="Experience"
-        subtitle="Two internships before graduation. Each one a deliberate step toward mastering the backend."
+        subtitle={
+          activeTag
+            ? `Showing experiences tagged with "${activeTag}"`
+            : "Two internships before graduation. Each one a deliberate step toward mastering the backend."
+        }
       >
-        <div className="max-w-2xl">
-          {experience.map((exp, i) => (
-            <TimelineEntry key={i} {...exp} />
+        <div className="mb-6 flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.delete("tag");
+              const qs = params.toString();
+              router.replace(`/work${qs ? `?${qs}` : ""}`, { scroll: false });
+            }}
+            className={`font-mono text-[11px] px-3 py-1.5 rounded-full border transition-colors duration-200 ${
+              !activeTag
+                ? "bg-accent text-white border-accent"
+                : "bg-transparent text-fg-muted border-border hover:border-accent-muted hover:text-fg"
+            }`}
+          >
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => handleTagClick(tag)}
+              className={`font-mono text-[11px] px-3 py-1.5 rounded-full border transition-colors duration-200 ${
+                activeTag === tag
+                  ? "bg-accent text-white border-accent"
+                  : "bg-transparent text-fg-muted border-border hover:border-accent-muted hover:text-fg"
+              }`}
+            >
+              {tag}
+            </button>
           ))}
+        </div>
+
+        <div className="max-w-2xl">
+          {filtered.length > 0 ? (
+            filtered.map((exp, i) => (
+              <TimelineEntry key={i} {...exp} activeTag={activeTag} onTagClick={handleTagClick} />
+            ))
+          ) : (
+            <p className="text-sm text-fg-muted font-mono">
+              No experiences tagged with &ldquo;{activeTag}&rdquo;.
+            </p>
+          )}
         </div>
       </Section>
 
@@ -57,5 +123,13 @@ export default function WorkPage() {
         </div>
       </Section>
     </div>
+  );
+}
+
+export default function WorkPage() {
+  return (
+    <Suspense>
+      <WorkContent />
+    </Suspense>
   );
 }

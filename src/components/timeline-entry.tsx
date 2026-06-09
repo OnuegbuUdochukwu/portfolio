@@ -10,6 +10,8 @@ interface TimelineEntryProps {
   description: string;
   highlights: readonly string[];
   tags: readonly string[];
+  activeTag?: string | null;
+  onTagClick?: (tag: string) => void;
 }
 
 export default function TimelineEntry({
@@ -20,6 +22,8 @@ export default function TimelineEntry({
   description,
   highlights,
   tags,
+  activeTag,
+  onTagClick,
 }: TimelineEntryProps) {
   return (
     <motion.div
@@ -60,12 +64,19 @@ export default function TimelineEntry({
 
       <div className="flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <span
+          <button
             key={tag}
-            className="font-mono text-[11px] px-2 py-0.5 rounded-full bg-accent-bg text-accent"
+            onClick={() => onTagClick?.(tag)}
+            className={`font-mono text-[11px] px-2 py-0.5 rounded-full transition-all duration-200 ${
+              activeTag === tag
+                ? "bg-accent text-white"
+                : activeTag
+                  ? "bg-accent-bg text-accent opacity-40 hover:opacity-100"
+                  : "bg-accent-bg text-accent"
+            }`}
           >
             {tag}
-          </span>
+          </button>
         ))}
       </div>
     </motion.div>
