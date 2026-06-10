@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import type { Project } from "@/lib/data";
 import { languageColors } from "@/lib/data";
+import TickerWidget from "@/components/ticker-widget";
 
 export default function ProjectDetail({ project }: { project: Project }) {
   const totalPercentage = project.languages?.reduce((sum, l) => sum + l.percentage, 0) || 100;
@@ -87,6 +88,15 @@ export default function ProjectDetail({ project }: { project: Project }) {
           </h2>
           <p className="text-sm text-fg leading-relaxed">{project.why}</p>
         </div>
+
+        {project.currencies && project.currencies.length > 0 && (
+          <div>
+            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
+              Live prices
+            </h2>
+            <TickerWidget currencies={project.currencies} />
+          </div>
+        )}
 
         {project.architectureNote && (
           <div>

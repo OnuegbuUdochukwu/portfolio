@@ -137,6 +137,7 @@ export interface Project {
   why: string;
   architectureNote?: string;
   learnings?: string[];
+  currencies?: string[];
 }
 
 export const projects: Project[] = [
@@ -165,6 +166,7 @@ export const projects: Project[] = [
     description: "Real-time cryptocurrency price tracking platform powered entirely by Java, integrating with Quidax APIs.",
     language: "Java",
     tags: ["Java", "Spring Boot", "Quidax API", "Real-time"],
+    currencies: ["btcngn", "ethngn", "usdtngn"],
     githubUrl: "https://github.com/OnuegbuUdochukwu/Cryptocurrency-Price-Ticker",
     status: "Archived",
     category: "Backend",
