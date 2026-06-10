@@ -12,6 +12,11 @@ interface TickerData {
   updatedAt: string;
 }
 
+interface Market {
+  id: string;
+  name: string;
+}
+
 function formatLabel(pair: string): string {
   const upper = pair.toUpperCase();
   const idx = upper.indexOf("NGN");
@@ -44,6 +49,7 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
   const [data, setData] = useState<TickerData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [allMarkets, setAllMarkets] = useState<Market[] | null>(null);
 
   const fetchTicker = useCallback(async (pair: string) => {
     setLoading(true);
@@ -66,6 +72,15 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
     const interval = setInterval(() => fetchTicker(active), 60000);
     return () => clearInterval(interval);
   }, [active, fetchTicker]);
+
+  useEffect(() => {
+    fetch("/api/quidax/markets")
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.markets) setAllMarkets(json.markets);
+      })
+      .catch(() => {});
+  }, []);
 
   if (!data) {
     if (loading) {
@@ -101,7 +116,7 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
 
   return (
     <div>
-      <div className="flex gap-1.5 mb-3 flex-wrap">
+      <div className="flex items-center gap-1.5 mb-3 flex-wrap">
         {currencies.map((c) => (
           <button
             key={c}
@@ -115,6 +130,31 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
             {formatLabel(c)}
           </button>
         ))}
+        {allMarkets && (
+          <div className="relative">
+            <select
+              value={active}
+              onChange={(e) => setActive(e.target.value)}
+              className="font-mono text-[11px] uppercase tracking-wider px-2.5 py-1 rounded bg-border/40 text-fg-muted hover:text-fg hover:bg-border/60 transition-colors duration-200 cursor-pointer appearance-none pr-6"
+            >
+              <optgroup label="Tagged">
+                {currencies.map((c) => (
+                  <option key={c} value={c}>{formatLabel(c)}</option>
+                ))}
+              </optgroup>
+              <optgroup label="All markets">
+                {allMarkets
+                  .filter((m) => !currencies.includes(m.id))
+                  .map((m) => (
+                    <option key={m.id} value={m.id}>{m.name}</option>
+                  ))}
+              </optgroup>
+            </select>
+            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none text-[10px]">
+              ▾
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="text-3xl font-mono text-fg tabular-nums tracking-tight mb-1.5">
