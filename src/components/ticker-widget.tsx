@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface TickerData {
   pair: string;
@@ -50,6 +50,18 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [allMarkets, setAllMarkets] = useState<Market[] | null>(null);
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   const fetchTicker = useCallback(async (pair: string) => {
     setLoading(true);
@@ -131,28 +143,37 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
           </button>
         ))}
         {allMarkets && (
-          <div className="relative">
-            <select
-              value={active}
-              onChange={(e) => setActive(e.target.value)}
-              className="font-mono text-[11px] uppercase tracking-wider px-2.5 py-1 rounded bg-border/40 text-fg-muted hover:text-fg hover:bg-border/60 transition-colors duration-200 cursor-pointer appearance-none pr-6"
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setOpen((v) => !v)}
+              className="font-mono text-[11px] uppercase tracking-wider px-2.5 py-1 rounded bg-border/40 text-fg-muted hover:text-fg hover:bg-border/60 transition-colors duration-200 flex items-center gap-1"
             >
-              <optgroup label="Tagged">
-                {currencies.map((c) => (
-                  <option key={c} value={c}>{formatLabel(c)}</option>
+              <span>All</span>
+              <span className="text-[10px] leading-none">{open ? "▴" : "▾"}</span>
+            </button>
+            {open && (
+              <div
+                className="absolute top-full left-0 mt-1 z-50 w-44 bg-bg border border-border rounded-md shadow-lg overflow-y-auto"
+                style={{ maxHeight: "210px" }}
+              >
+                {allMarkets.map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      setActive(m.id);
+                      setOpen(false);
+                    }}
+                    className={`w-full text-left font-mono text-[11px] tracking-wider px-3 py-1.5 transition-colors duration-200 ${
+                      m.id === active
+                        ? "bg-accent text-white"
+                        : "text-fg-muted hover:bg-border/40 hover:text-fg"
+                    }`}
+                  >
+                    {m.name}
+                  </button>
                 ))}
-              </optgroup>
-              <optgroup label="All markets">
-                {allMarkets
-                  .filter((m) => !currencies.includes(m.id))
-                  .map((m) => (
-                    <option key={m.id} value={m.id}>{m.name}</option>
-                  ))}
-              </optgroup>
-            </select>
-            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-fg-muted pointer-events-none text-[10px]">
-              ▾
-            </span>
+              </div>
+            )}
           </div>
         )}
       </div>
