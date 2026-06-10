@@ -5,16 +5,26 @@ interface QuidaxTicker {
   sell: string;
   high: string;
   low: string;
+  open: string;
   last: string;
   vol: string;
-  change: string;
-  at: string;
 }
 
 interface QuidaxResponse {
   status: string;
   message: string;
-  ticker: QuidaxTicker;
+  data: {
+    at: number;
+    ticker: QuidaxTicker;
+    market: string;
+  };
+}
+
+function calcChangePct(last: string, open: string): string {
+  const l = parseFloat(last);
+  const o = parseFloat(open);
+  if (o === 0) return "0";
+  return (((l - o) / o) * 100).toFixed(2);
 }
 
 export async function GET(request: Request) {
@@ -38,15 +48,16 @@ export async function GET(request: Request) {
     }
 
     const json: QuidaxResponse = await res.json();
+    const { ticker, at } = json.data;
 
     return Response.json({
       pair,
-      price: json.ticker.last,
-      changePct: json.ticker.change,
-      high: json.ticker.high,
-      low: json.ticker.low,
-      volume: json.ticker.vol,
-      updatedAt: json.ticker.at,
+      price: ticker.last,
+      changePct: calcChangePct(ticker.last, ticker.open),
+      high: ticker.high,
+      low: ticker.low,
+      volume: ticker.vol,
+      updatedAt: new Date(at * 1000).toISOString(),
     });
   } catch (err) {
     console.error("Failed to fetch Quidax ticker:", err);

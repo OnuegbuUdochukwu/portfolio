@@ -53,7 +53,8 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
       if (!res.ok) throw new Error("Failed");
       const json = await res.json();
       setData(json);
-    } catch {
+    } catch (e) {
+      console.error("TickerWidget fetch error:", e);
       setError(true);
     } finally {
       setLoading(false);
@@ -66,25 +67,33 @@ export default function TickerWidget({ currencies }: { currencies: string[] }) {
     return () => clearInterval(interval);
   }, [active, fetchTicker]);
 
-  if (loading && !data) {
-    return (
-      <div className="space-y-2">
-        <div className="flex gap-1.5">
-          {currencies.map((c) => (
-            <div key={c} className="h-6 w-20 rounded bg-border/60 animate-pulse" />
-          ))}
+  if (!data) {
+    if (loading) {
+      return (
+        <div className="space-y-2">
+          <div className="flex gap-1.5">
+            {currencies.map((c) => (
+              <div key={c} className="h-6 w-20 rounded bg-border/80 animate-pulse" />
+            ))}
+          </div>
+          <div className="h-10 w-48 rounded bg-border/80 animate-pulse" />
+          <div className="h-4 w-64 rounded bg-border/80 animate-pulse" />
         </div>
-        <div className="h-10 w-48 rounded bg-border/60 animate-pulse" />
-        <div className="h-4 w-64 rounded bg-border/60 animate-pulse" />
+      );
+    }
+    if (error) {
+      return (
+        <div className="font-mono text-[11px] text-fg-muted/60 italic">
+          Unable to load live prices
+        </div>
+      );
+    }
+    return (
+      <div className="font-mono text-[11px] text-fg-muted/60 italic">
+        Unable to load live prices
       </div>
     );
   }
-
-  if (error && !data) {
-    return null;
-  }
-
-  if (!data) return null;
 
   const changeNum = parseFloat(data.changePct);
   const changeClass = changeNum > 0 ? "text-green-500" : changeNum < 0 ? "text-red-500" : "text-fg-muted";
