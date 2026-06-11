@@ -1,12 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { Project } from "@/lib/data";
 import { languageColors } from "@/lib/data";
 import TickerWidget from "@/components/ticker-widget";
+import CommitGraph from "@/components/commit-graph";
 
 export default function ProjectDetail({ project }: { project: Project }) {
+  const [selectedSha, setSelectedSha] = useState<string | null>(null);
   const totalPercentage = project.languages?.reduce((sum, l) => sum + l.percentage, 0) || 100;
 
   return (
@@ -140,6 +143,19 @@ export default function ProjectDetail({ project }: { project: Project }) {
             ))}
           </div>
         </div>
+
+        {project.githubUrl && (
+          <div>
+            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
+              Commit graph
+            </h2>
+            <CommitGraph
+              githubUrl={project.githubUrl}
+              selectedSha={selectedSha}
+              onSelectSha={setSelectedSha}
+            />
+          </div>
+        )}
       </div>
     </motion.div>
   );
