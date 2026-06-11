@@ -8,8 +8,6 @@ import StatusLine from "@/components/status-line";
 import LeetCodeStats from "@/components/leetcode-stats";
 import CodeWarsStats from "@/components/codewars-stats";
 import Weather from "@/components/weather";
-import CrossRepoMap from "@/components/cross-repo-map";
-import GitHubProfile from "@/components/github-profile";
 import { site, quotes } from "@/lib/data";
 
 export default function Home() {
@@ -115,22 +113,6 @@ export default function Home() {
         <p className="text-xs text-fg-muted mt-3">
           &ldquo;I show up and ship. Building the habits of a Senior Engineer before I graduate.&rdquo;
         </p>
-      </motion.section>
-
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-        className="pb-24"
-      >
-        <p className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-4">
-          Repositories
-        </p>
-        <div className="mb-6">
-          <GitHubProfile />
-        </div>
-        <CrossRepoMap />
       </motion.section>
 
       <motion.section

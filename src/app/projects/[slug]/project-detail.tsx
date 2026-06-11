@@ -1,24 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import type { Project } from "@/lib/data";
 import { languageColors } from "@/lib/data";
 import TickerWidget from "@/components/ticker-widget";
-import CommitGraph from "@/components/commit-graph";
-import FileExplorer from "@/components/file-explorer";
-import ReleaseTimeline from "@/components/release-timeline";
-import CodeChurnSparkline from "@/components/code-churn-sparkline";
-import ContributorBreakdown from "@/components/contributor-breakdown";
-import LanguageEvolution from "@/components/language-evolution";
-import PRThroughput from "@/components/pr-throughput";
-import IssueHistogram from "@/components/issue-histogram";
-import CommitFrequency from "@/components/commit-frequency";
-import DependencyGraph from "@/components/dependency-graph";
 
 export default function ProjectDetail({ project }: { project: Project }) {
-  const [selectedSha, setSelectedSha] = useState<string | null>(null);
   const totalPercentage = project.languages?.reduce((sum, l) => sum + l.percentage, 0) || 100;
 
   return (
@@ -64,14 +52,7 @@ export default function ProjectDetail({ project }: { project: Project }) {
         )}
       </div>
 
-      {project.githubUrl && project.languages ? (
-        <div className="mb-8">
-          <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-            Language evolution
-          </h2>
-          <LanguageEvolution githubUrl={project.githubUrl} />
-        </div>
-      ) : project.languages && (
+      {project.languages && (
         <div className="mb-8">
           <p className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
             Language breakdown
@@ -100,42 +81,6 @@ export default function ProjectDetail({ project }: { project: Project }) {
         </div>
       )}
 
-      {project.githubUrl && (
-        <div className="mb-8">
-          <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-            Code churn
-          </h2>
-          <CodeChurnSparkline githubUrl={project.githubUrl} />
-        </div>
-      )}
-
-      {project.githubUrl && (
-        <div className="mb-8">
-          <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-            PR throughput
-          </h2>
-          <PRThroughput githubUrl={project.githubUrl} />
-        </div>
-      )}
-
-      {project.githubUrl && (
-        <div className="mb-8">
-          <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-            Commit frequency
-          </h2>
-          <CommitFrequency githubUrl={project.githubUrl} />
-        </div>
-      )}
-
-      {project.githubUrl && (
-        <div className="mb-8">
-          <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-            Contributors
-          </h2>
-          <ContributorBreakdown githubUrl={project.githubUrl} />
-        </div>
-      )}
-
       <div className="border-t border-border pt-6 space-y-6">
         <div>
           <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
@@ -143,52 +88,6 @@ export default function ProjectDetail({ project }: { project: Project }) {
           </h2>
           <p className="text-sm text-fg leading-relaxed">{project.why}</p>
         </div>
-
-        {project.githubUrl && (
-          <div>
-            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-              Commit graph
-            </h2>
-            <CommitGraph
-              githubUrl={project.githubUrl}
-              selectedSha={selectedSha}
-              onSelectSha={setSelectedSha}
-            />
-            <FileExplorer
-              githubUrl={project.githubUrl}
-              sha={selectedSha}
-              visible={!!selectedSha}
-              onClose={() => setSelectedSha(null)}
-            />
-          </div>
-        )}
-
-        {project.githubUrl && (
-          <div>
-            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-              Issue resolution
-            </h2>
-            <IssueHistogram githubUrl={project.githubUrl} />
-          </div>
-        )}
-
-        {project.githubUrl && (
-          <div>
-            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-2">
-              Dependencies
-            </h2>
-            <DependencyGraph githubUrl={project.githubUrl} />
-          </div>
-        )}
-
-        {project.githubUrl && (
-          <div>
-            <h2 className="font-mono text-[11px] uppercase tracking-widest text-fg-muted mb-3">
-              Releases
-            </h2>
-            <ReleaseTimeline githubUrl={project.githubUrl} />
-          </div>
-        )}
 
         {project.currencies && project.currencies.length > 0 && (
           <div>
