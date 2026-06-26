@@ -224,11 +224,11 @@ export default function CommitGraph({
                   />
                 );
               }
-              const offset = Math.max(Math.abs(x2 - x1) * 0.4, 20);
+              const midX = Math.max(x1, x2) + 12;
               return (
-                <path
+                <polyline
                   key={`edge-${e.from}-${e.to}`}
-                  d={`M ${x1},${y1} C ${x1 + offset},${y1} ${x2 + offset},${y2} ${x2},${y2}`}
+                  points={`${x1},${y1} ${midX},${y1} ${midX},${y2} ${x2},${y2}`}
                   fill="none"
                   stroke="#B8B6B4"
                   strokeWidth={1}
