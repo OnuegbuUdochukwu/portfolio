@@ -18,12 +18,12 @@ export const site = {
 } as const;
 
 export const now = {
-  date: "October 2026",
+  date: "November 2026",
   lines: [
     "Finishing my final year at Covenant University (graduating 2026).",
     "Building an AI-focused final year project.",
     "Deepening my Java & Spring Boot skills with production-grade APIs.",
-    "Maintaining a 371-day GitHub contribution streak.",
+    "Maintaining a 365-day GitHub contribution streak.",
     "Open to backend engineering roles - remote.",
   ],
 } as const;
